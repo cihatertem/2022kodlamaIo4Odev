@@ -1,7 +1,8 @@
 package kodlama.io.devs.webApi.controllers;
 
 import kodlama.io.devs.business.abstracts.LanguageService;
-import kodlama.io.devs.entities.Language;
+import kodlama.io.devs.business.requests.languageRequests.LanguageRequest;
+import kodlama.io.devs.business.responses.languageResponses.LanguageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/languages")
 public class LanguagesController {
-    private LanguageService languageService;
+    private final LanguageService languageService;
 
     @Autowired
     public LanguagesController(LanguageService languageService) {
@@ -18,29 +19,27 @@ public class LanguagesController {
     }
 
     @GetMapping("")
-    public List<Language> getAllLanguages() {
+    public List<LanguageResponse> getAllLanguages() {
         return languageService.getAllLanguages();
     }
 
     @GetMapping("/{id}")
-    public Language getSingleLanguage(@PathVariable int id) {
+    public LanguageResponse getSingleLanguage(@PathVariable int id) throws Exception {
         return languageService.getSingleLanguage(id);
     }
 
     @PostMapping("")
-    public Language createNewLanguage(@RequestBody Language language) throws Exception {
-        return languageService.createNewLanguage(language.getName());
+    public String createNewLanguage(@RequestBody LanguageRequest createUpdateLanguageRequest) throws Exception {
+        return languageService.createNewLanguage(createUpdateLanguageRequest);
     }
 
     @PutMapping("/{id}")
-    public Language updateLanguage(@PathVariable int id, @RequestBody Language language) throws Exception {
-        language.setId(id);
-        return languageService.updateLanguage(language);
+    public String updateLanguage(@RequestBody LanguageRequest createUpdateLanguageRequest, @PathVariable int id) throws Exception {
+        return languageService.updateLanguage(createUpdateLanguageRequest, id);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteLanguage(@PathVariable int id) {
+    public String deleteLanguage(@PathVariable int id) throws Exception {
         return languageService.deleteLanguage(id);
     }
-
 }
